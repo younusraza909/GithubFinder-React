@@ -1,17 +1,17 @@
-import React from 'react';
-import './App.css';
-import Navbar from "./components/layout/Navbar"
-import UserItem from "./components/users/UserItem"
+import React from "react";
+import "./App.css";
+import Navbar from "./components/layout/Navbar";
+import Users from "./components/users/Users";
 
 class App extends React.Component {
-  render(){
+  render() {
     return (
       <div className="App">
-       <Navbar title="Github Finder" icon="fab fa-github"/>
-       <UserItem />
+        <Navbar title="Github Finder" icon="fab fa-github" />
+        <Users />
       </div>
     );
-  } 
+  }
 }
 
 export default App;
