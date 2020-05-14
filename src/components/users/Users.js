@@ -29,7 +29,7 @@ class Users extends Component {
     return (
       <div style={userStyle}>
         {this.state.users.map((user) => (
-          <UserItem user={user} key={user.id} />
+          <UserItem user={user} />
         ))}
       </div>
     );
