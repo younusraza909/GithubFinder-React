@@ -5,12 +5,14 @@ import axios from "axios";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Users from "./components/users/Users";
+import User from "./components/users/User";
 import Search from "./components/users/Search";
 import Alert from "./components/layout/Alert";
 
 class App extends React.Component {
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null,
   };
@@ -33,6 +35,16 @@ class App extends React.Component {
     this.setState({ loading: false, users: res.data.items });
   };
 
+  //Getting single user
+  searchUser = async (username) => {
+    this.setState({ loading: true });
+
+    const res = await axios.get(
+      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID} & client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    this.setState({ loading: false, user: res.data });
+  };
+
   //Clear Users from state
   clearUsers = () => {
     this.setState({ users: [], loading: false });
@@ -48,6 +60,7 @@ class App extends React.Component {
   };
 
   render() {
+    const { user, users, loading, alert } = this.state;
     return (
       <Router>
         <div className="App">
@@ -63,17 +76,27 @@ class App extends React.Component {
                     <Search
                       searchUsers={this.searchUsers}
                       clearUsers={this.clearUsers}
-                      showBtn={this.state.users.length > 0 ? true : false}
+                      showBtn={users.length > 0 ? true : false}
                       setAlert={this.setAlert}
                     />
-                    <Users
-                      users={this.state.users}
-                      loading={this.state.loading}
-                    />
+                    <Users users={users} loading={loading} />
                   </Fragment>
                 )}
               />
               <Route exact path="/about" component={About} />
+              {/* Here collon will pass login as parmater which we can get  */}
+              <Route
+                exact
+                path="/user/:login"
+                render={(props) => (
+                  <User
+                    {...props}
+                    searchUser={this.searchUser}
+                    user={user}
+                    loading={loading}
+                  />
+                )}
+              />
             </Switch>
           </div>
         </div>
