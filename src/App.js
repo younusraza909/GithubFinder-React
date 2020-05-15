@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Fragment } from "react";
+import About from "./components/pages/About";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
@@ -47,19 +49,35 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <Navbar title="Github Finder" icon="fab fa-github" />
-        <div className="container">
-          <Alert alert={this.state.alert} />
-          <Search
-            searchUsers={this.searchUsers}
-            clearUsers={this.clearUsers}
-            showBtn={this.state.users.length > 0 ? true : false}
-            setAlert={this.setAlert}
-          />
-          <Users users={this.state.users} loading={this.state.loading} />
+      <Router>
+        <div className="App">
+          <Navbar title="Github Finder" icon="fab fa-github" />
+          <div className="container">
+            <Alert alert={this.state.alert} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <Fragment>
+                    <Search
+                      searchUsers={this.searchUsers}
+                      clearUsers={this.clearUsers}
+                      showBtn={this.state.users.length > 0 ? true : false}
+                      setAlert={this.setAlert}
+                    />
+                    <Users
+                      users={this.state.users}
+                      loading={this.state.loading}
+                    />
+                  </Fragment>
+                )}
+              />
+              <Route exact path="/about" component={About} />
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }
