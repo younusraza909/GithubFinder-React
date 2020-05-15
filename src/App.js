@@ -4,11 +4,13 @@ import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Users from "./components/users/Users";
 import Search from "./components/users/Search";
+import Alert from "./components/layout/Alert";
 
 class App extends React.Component {
   state = {
     users: [],
     loading: false,
+    alert: null,
   };
 
   // async componentDidMount() {
@@ -19,6 +21,7 @@ class App extends React.Component {
   //   this.setState({ loading: false, users: res.data });
   // }
 
+  //Get Input Gthub Users from api
   searchUsers = async (text) => {
     this.setState({ loading: true });
 
@@ -28,12 +31,32 @@ class App extends React.Component {
     this.setState({ loading: false, users: res.data.items });
   };
 
+  //Clear Users from state
+  clearUsers = () => {
+    this.setState({ users: [], loading: false });
+  };
+
+  //Setting Alert
+  setAlert = (msg, type) => {
+    this.setState({ alert: { msg: msg, type: type } });
+
+    setTimeout(() => {
+      this.setState({ alert: null });
+    }, 5000);
+  };
+
   render() {
     return (
       <div className="App">
         <Navbar title="Github Finder" icon="fab fa-github" />
         <div className="container">
-          <Search searchUsers={this.searchUsers} />
+          <Alert alert={this.state.alert} />
+          <Search
+            searchUsers={this.searchUsers}
+            clearUsers={this.clearUsers}
+            showBtn={this.state.users.length > 0 ? true : false}
+            setAlert={this.setAlert}
+          />
           <Users users={this.state.users} loading={this.state.loading} />
         </div>
       </div>
